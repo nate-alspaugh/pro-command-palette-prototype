@@ -44,6 +44,9 @@ function CommandPalette({ isOpen, onClose, setView }) {
         setView('card-explorer')
       }
       onClose()
+    } else if (item.type === 'stock' && item.symbol === 'RBLX') {
+      setView('dashboard')
+      onClose()
     }
   }
 
