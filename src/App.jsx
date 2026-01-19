@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Sidebar from './components/Sidebar'
 import Dashboard from './components/Dashboard'
 import ComponentCatalogue from './components/ComponentCatalogue'
+import CardExplorer from './components/CardExplorer'
 import CommandPalette from './components/CommandPalette'
 import { useAnimeAnimations } from './hooks/useAnimeAnimations'
 import './styles.css'
@@ -30,9 +31,9 @@ function App() {
     <div className="app-layout">
       <Sidebar />
       <main className="main-content">
-        {currentView === 'dashboard' ? (
-          <Dashboard />
-        ) : (
+        {currentView === 'dashboard' && <Dashboard />}
+        {currentView === 'card-explorer' && <CardExplorer />}
+        {(currentView === 'catalogue' || currentView.startsWith('catalogue:')) && (
           <ComponentCatalogue 
             initialComponentId={currentView.startsWith('catalogue:') ? currentView.split(':')[1] : null} 
             onNavigate={(id) => setCurrentView(id ? `catalogue:${id}` : 'catalogue')}

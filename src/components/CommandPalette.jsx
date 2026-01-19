@@ -6,10 +6,8 @@ const items = [
   { type: 'stock', symbol: 'RBLX', company: 'ROBLOX CORP', change: '-0.35%', price: '$128.11' },
   { type: 'stock', symbol: 'AAPL', company: 'APPLE INC', change: '-0.35%', price: '$128.11' },
   { type: 'stock', symbol: 'MSFT', company: 'MICROSOFT CORP', change: '-0.35%', price: '$128.11' },
-  { type: 'action', id: 'view-dashboard', symbol: '⌂', company: 'Go to Dashboard', shortcut: 'G D' },
   { type: 'action', id: 'view-catalogue', symbol: '⌘', company: 'View Component Catalogue', shortcut: 'G C' },
-  { type: 'action', id: 'component-analyst-consensus', symbol: '◒', company: 'Catalogue: Analyst Consensus', shortcut: 'G A' },
-  { type: 'action', id: 'component-rating-momentum', symbol: '◒', company: 'Catalogue: Rating Momentum', shortcut: 'G R' }
+  { type: 'action', id: 'view-card-explorer', symbol: '◈', company: 'Card Explorer', shortcut: 'G E' }
 ]
 
 // Default Designer Controls
@@ -30,16 +28,20 @@ function CommandPalette({ isOpen, onClose, setView }) {
   const inputRef = useRef(null)
   const canvasRef = useRef(null)
 
+  // Reset selection to top when opened
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedIndex(0)
+    }
+  }, [isOpen])
+
   const handleSelect = (index) => {
     const item = items[index]
     if (item.type === 'action') {
-      if (item.id.startsWith('component-')) {
-        const componentId = item.id.replace('component-', '')
-        setView(`catalogue:${componentId}`)
-      } else if (item.id === 'view-catalogue') {
+      if (item.id === 'view-catalogue') {
         setView('catalogue')
-      } else if (item.id === 'view-dashboard') {
-        setView('dashboard')
+      } else if (item.id === 'view-card-explorer') {
+        setView('card-explorer')
       }
       onClose()
     }

@@ -42,13 +42,13 @@ function NavTabs() {
   }, [])
 
   return (
-    <nav className="nav-row">
+    <nav className="pill-row">
       {tabs.map((tab, index) => (
         <a
           key={tab}
           href="#"
           ref={el => tabRefs.current[index] = el}
-          className={`nav-tab ${tab === 'Financials' ? 'active' : ''}`}
+          className={`pill-tab ${tab === 'Financials' ? 'active' : ''}`}
         >
           {tab}
         </a>
