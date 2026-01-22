@@ -1,8 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { SummaryCard, TopPredictorCard } from '../cards'
-import { GaugeLayout, KpiLayout, DataTable } from '../layout'
-import { Header, NavTabs, Tab } from '../navigation'
-import { Chip } from '../ui'
+import { GaugeLayout, KpiLayout, DataTable, RightPanel } from '../layout'
+import { Header, NavTabs, Tab, Sidebar, SubNav } from '../navigation'
+import { Avatar, Chip, CommandPalette, CommandPaletteRow } from '../ui'
 import { AreaChart, BarChart, HorizontalBarChart, LineChart } from '../charts'
 import { STORAGE_KEYS } from '../../constants'
 
@@ -332,6 +332,7 @@ interface ComponentDefinition {
   properties?: ComponentProperty[]
   render: (props: Record<string, any>) => React.ReactElement
   wide?: boolean
+  fullPreview?: boolean // Hides properties panel, shows full-width preview
 }
 
 interface ComponentLibraryProps {
@@ -347,6 +348,33 @@ const componentsList: ComponentDefinition[] = [
     category: 'Foundation',
     properties: [],
     render: () => <DesignTokens />
+  },
+  {
+    id: 'avatar',
+    name: 'Avatar',
+    description: 'A versatile component for displaying logos, portraits, or initials with various sizes and shapes.',
+    category: 'Elements',
+    properties: [
+      { id: 'size', name: 'Size', type: 'select', options: ['xs', 'sm', 'md', 'lg', 'xl'], default: 'md' },
+      { id: 'shape', name: 'Shape', type: 'select', options: ['circle', 'rounded'], default: 'rounded' },
+      { id: 'type', name: 'Type', type: 'select', options: ['logo', 'user'], default: 'logo' },
+      { id: 'content', name: 'Content', type: 'text', default: 'JM' }
+    ],
+    render: (props) => {
+      const className = props.type === 'logo' ? 'avatar-logo' : 'avatar-user'
+      const content = props.type === 'logo' ? (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+          <path d="M2 2h20v20H2z"/>
+          <path d="M7 7h10v10H7z" fill="#000"/>
+        </svg>
+      ) : props.content
+      
+      return (
+        <Avatar size={props.size} shape={props.shape} className={className}>
+          {content}
+        </Avatar>
+      )
+    }
   },
   {
     id: 'chip',
@@ -391,6 +419,52 @@ const componentsList: ComponentDefinition[] = [
         {props.label}
       </button>
     )
+  },
+  {
+    id: 'command-palette',
+    name: 'Command Palette',
+    description: 'A modal command palette for quick navigation and actions, activated via CMD+K.',
+    category: 'Navigation',
+    properties: [],
+    render: () => (
+      <div style={{ width: '100%', maxWidth: '700px', position: 'relative' }}>
+        <CommandPalette isOpen={true} onClose={() => {}} setView={() => {}} isPreview={true} />
+      </div>
+    ),
+    wide: true
+  },
+  {
+    id: 'command-palette-row',
+    name: 'Command Palette Row',
+    description: 'A row component for the command palette with configurable layouts and information displays.',
+    category: 'Navigation',
+    properties: [
+      { id: 'symbol', name: 'Symbol', type: 'text', default: 'RBLX' },
+      { id: 'company', name: 'Company', type: 'text', default: 'ROBLOX CORP' },
+      { id: 'variant', name: 'Variant', type: 'select', options: ['single', 'double'], default: 'double' },
+      { id: 'showPriceInfo', name: 'Show Price Info', type: 'boolean', default: false },
+      { id: 'price', name: 'Price', type: 'text', default: '$128.11' },
+      { id: 'change', name: 'Change', type: 'text', default: '-0.35%' },
+      { id: 'showKeyboardShortcut', name: 'Show Keyboard Shortcut', type: 'boolean', default: false },
+      { id: 'keyboardShortcut', name: 'Keyboard Shortcut', type: 'text', default: 'G C' },
+      { id: 'initialsType', name: 'Initials Type', type: 'select', options: ['first', 'both'], default: 'first' }
+    ],
+    render: (props) => (
+      <ul className="cp-list" style={{ width: '100%', maxWidth: '600px', background: 'var(--surface-0)', padding: '8px', borderRadius: '12px' }}>
+        <CommandPaletteRow
+          symbol={props.symbol}
+          company={props.company}
+          variant={props.variant}
+          showPriceInfo={props.showPriceInfo}
+          price={props.price}
+          change={props.change}
+          showKeyboardShortcut={props.showKeyboardShortcut}
+          keyboardShortcut={props.keyboardShortcut}
+          initialsType={props.initialsType}
+        />
+      </ul>
+    ),
+    wide: true
   },
   {
     id: 'summary-card',
@@ -603,7 +677,7 @@ const componentsList: ComponentDefinition[] = [
     id: 'data-table',
     name: 'Data Table',
     description: 'A simple table component for displaying label-value pairs with dividers between rows.',
-    category: 'Layout',
+    category: 'Tables',
     properties: [
       { id: 'numRows', name: 'Number of Rows', type: 'select', options: [1, 2, 3, 4, 5, 6, 7, 8], default: 4 },
       { id: 'row1Label', name: 'Row 1 Label', type: 'text', default: 'Target price' },
@@ -676,6 +750,70 @@ const componentsList: ComponentDefinition[] = [
     properties: [],
     render: () => <NavTabs />,
     wide: true // Mark as wide component for scaling
+  },
+  {
+    id: 'layout-full',
+    name: 'Layout: Full (Sub Nav + Side Panel)',
+    description: 'Complete layout with sidebar, sub navigation, main content area, and side panel.',
+    category: 'Layouts',
+    properties: [],
+    fullPreview: true,
+    render: () => (
+      <div className="app-layout-preview">
+        <div className="app-layout-preview-inner">
+          <Sidebar />
+          <SubNav isVisible={true} />
+          <div className="preview-main-content with-subnav with-panel">
+            <div className="preview-content-placeholder">
+              <span className="action-label-sm">General Content Area</span>
+            </div>
+          </div>
+          <RightPanel isOpen={true} onClose={() => {}} />
+        </div>
+      </div>
+    )
+  },
+  {
+    id: 'layout-panel-only',
+    name: 'Layout: Side Panel Only',
+    description: 'Layout with sidebar, main content area, and side panel (no sub navigation).',
+    category: 'Layouts',
+    properties: [],
+    fullPreview: true,
+    render: () => (
+      <div className="app-layout-preview">
+        <div className="app-layout-preview-inner">
+          <Sidebar />
+          <div className="preview-main-content with-panel">
+            <div className="preview-content-placeholder">
+              <span className="action-label-sm">General Content Area</span>
+            </div>
+          </div>
+          <RightPanel isOpen={true} onClose={() => {}} />
+        </div>
+      </div>
+    )
+  },
+  {
+    id: 'layout-subnav-only',
+    name: 'Layout: Sub Nav Only',
+    description: 'Layout with sidebar, sub navigation, and main content area (no side panel).',
+    category: 'Layouts',
+    properties: [],
+    fullPreview: true,
+    render: () => (
+      <div className="app-layout-preview">
+        <div className="app-layout-preview-inner">
+          <Sidebar />
+          <SubNav isVisible={true} />
+          <div className="preview-main-content with-subnav">
+            <div className="preview-content-placeholder">
+              <span className="action-label-sm">General Content Area</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 ]
 
@@ -762,15 +900,15 @@ const ComponentLibrary = ({ initialComponentId, onNavigate }: ComponentLibraryPr
           </div>
         </div>
 
-        <div className={`library-detail-content ${selectedComponentId === 'design-tokens' ? 'full-width' : ''}`}>
-          <div className={`component-preview-box ${selectedComponent.wide ? 'wide-component' : ''}`}>
-            <div className="preview-label">PREVIEW</div>
-            <div className={`preview-stage ${selectedComponent.wide ? 'wide-preview' : ''}`}>
+        <div className={`library-detail-content ${selectedComponentId === 'design-tokens' || selectedComponent.fullPreview ? 'full-width' : ''}`}>
+          <div className={`component-preview-box ${selectedComponent.wide ? 'wide-component' : ''} ${selectedComponent.fullPreview ? 'full-preview' : ''}`}>
+            {!selectedComponent.fullPreview && <div className="preview-label">PREVIEW</div>}
+            <div className={`preview-stage ${selectedComponent.wide ? 'wide-preview' : ''} ${selectedComponent.fullPreview ? 'full-preview-stage' : ''}`}>
               {selectedComponent.render(componentProps)}
             </div>
           </div>
 
-          {selectedComponentId !== 'design-tokens' && (
+          {selectedComponentId !== 'design-tokens' && !selectedComponent.fullPreview && (
             <div className="component-properties-panel">
               <div className="panel-header">PROPERTIES</div>
               <div className="properties-list">

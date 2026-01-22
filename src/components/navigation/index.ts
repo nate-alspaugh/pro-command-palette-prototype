@@ -1,4 +1,7 @@
 export { default as Header } from './Header'
+export { default as MainNav, NavTab } from './MainNav'
 export { default as NavTabs } from './NavTabs'
+export type { TabName } from './NavTabs'
 export { default as Sidebar } from './Sidebar'
+export { default as SubNav } from './SubNav'
 export { default as Tab } from './Tab'

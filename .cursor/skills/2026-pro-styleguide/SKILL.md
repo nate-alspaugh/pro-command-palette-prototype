@@ -1,22 +1,8 @@
 ---
-name: ui-skills
-description: Opinionated constraints for building better interfaces with agents, customized for specific Project Design System.
+name: ui-guide
+description: Our design constraints for Pro 
 ---
 
-# UI Skills
-
-When invoked, apply these opinionated constraints for building better interfaces.
-
-## How to use
-
-- `/ui-skills`
-  Apply these constraints to any UI work in this conversation.
-
-- `/ui-skills <file>`
-  Review the file against all constraints below and output:
-  - violations (quote the exact line/snippet)
-  - why it matters (1 short sentence)
-  - a concrete fix (code-level suggestion)
 
 ## Stack
 
@@ -61,6 +47,19 @@ When invoked, apply these opinionated constraints for building better interfaces
   - MUST use specific weights: `450` (Book) and `530` (Medium).
   - NEVER round to 400 or 500.
   - Mono Bold: 700.
+
+- **Semantic Text Styles Map (MUST FOLLOW):**
+  - `Title 4`: size: 2xl (28px), weight: 530
+  - `Title 3`: size: xl (24px), weight: 530
+  - `Title 2`: size: l (20px), weight: 450
+  - `Title 1`: size: m (18px), weight: 450
+  - `Paragraph 3`: size: s (16px), weight: 450
+  - `Paragraph 2`: size: xs (14px), weight: 450
+  - `Paragraph 1`: size: 2xs (12px), weight: 450
+  - `Action Label (s)`: size: s (16px), weight: 450
+  - `Action Label (xs)`: size: xs (14px), weight: 450
+  - `Table Label`: size: xs/2xs, weight: 450
+  - `Mono Label`: Uppercase, Bold (700)
 
 - **Line Height Logic:**
   - Single-line content (Titles/Labels): MUST use `100%` (`leading-none`).

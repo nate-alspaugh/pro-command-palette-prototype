@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCommandPalette, useWebGLShadow } from '../../hooks'
+import CommandPaletteRow from './CommandPaletteRow'
 
 interface StockItem {
   type: 'stock'
@@ -13,9 +14,9 @@ interface StockItem {
 interface ActionItem {
   type: 'action'
   id: string
-  symbol: string
-  company: string
-  shortcut: string
+  label: string
+  shortcut?: string
+  avatarVariant?: 'default' | 'placeholder'
 }
 
 type CommandItem = StockItem | ActionItem
@@ -24,8 +25,8 @@ const items: CommandItem[] = [
   { type: 'stock', symbol: 'RBLX', company: 'ROBLOX CORP', change: '-0.35%', price: '$128.11' },
   { type: 'stock', symbol: 'AAPL', company: 'APPLE INC', change: '-0.35%', price: '$128.11' },
   { type: 'stock', symbol: 'MSFT', company: 'MICROSOFT CORP', change: '-0.35%', price: '$128.11' },
-  { type: 'action', id: 'view-library', symbol: '⌘', company: 'View Component Library', shortcut: 'G C' },
-  { type: 'action', id: 'view-card-explorer', symbol: '◈', company: 'Card Explorer', shortcut: 'G E' }
+  { type: 'action', id: 'view-library', label: 'Component Library', avatarVariant: 'placeholder' },
+  { type: 'action', id: 'view-card-explorer', label: 'Card Explorer', avatarVariant: 'placeholder' }
 ]
 
 // Default Designer Controls
@@ -43,9 +44,10 @@ interface CommandPaletteProps {
   isOpen: boolean
   onClose: () => void
   setView: (view: string) => void
+  isPreview?: boolean // When true, renders without overlay for component library preview
 }
 
-export default function CommandPalette({ isOpen, onClose, setView }: CommandPaletteProps) {
+export default function CommandPalette({ isOpen, onClose, setView, isPreview = false }: CommandPaletteProps) {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const overlayRef = useRef<HTMLDivElement>(null)
   const modalRef = useRef<HTMLDivElement>(null)
@@ -74,8 +76,9 @@ export default function CommandPalette({ isOpen, onClose, setView }: CommandPale
     }
   }
 
+  // Only use hooks when not in preview mode
   useCommandPalette({ 
-    isOpen, 
+    isOpen: isPreview ? false : isOpen, 
     onClose, 
     selectedIndex, 
     setSelectedIndex, 
@@ -85,7 +88,56 @@ export default function CommandPalette({ isOpen, onClose, setView }: CommandPale
     onSelect: handleSelect,
     itemsCount: items.length
   })
-  useWebGLShadow({ isOpen, modalRef, canvasRef, overlayRef, controls: DEFAULT_CONTROLS })
+  useWebGLShadow({ isOpen: isPreview ? false : isOpen, modalRef, canvasRef, overlayRef, controls: DEFAULT_CONTROLS })
+
+  // Preview mode renders just the modal without overlay
+  if (isPreview) {
+    return (
+      <div className="command-palette-modal command-palette-preview" role="dialog" aria-modal="false">
+        <div className="cp-header">
+          <svg className="cp-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input 
+            type="text" 
+            className="cp-search-input" 
+            placeholder="Search or start a chat"
+            readOnly
+          />
+        </div>
+        
+        <div className="cp-body">
+          <div className="cp-section-header">RECENT & ACTIONS</div>
+          <ul className="cp-list">
+            {items.map((item, index) => (
+              <CommandPaletteRow
+                key={index}
+                symbol={item.type === 'stock' ? item.symbol : item.label}
+                company={item.type === 'stock' ? item.company : ''}
+                isActive={index === 0}
+                variant={item.type === 'stock' ? 'double' : 'single'}
+                showPriceInfo={item.type === 'stock'}
+                price={item.type === 'stock' ? item.price : undefined}
+                change={item.type === 'stock' ? item.change : undefined}
+                showKeyboardShortcut={item.type === 'action' && !!item.shortcut}
+                keyboardShortcut={item.type === 'action' ? item.shortcut : undefined}
+                initialsType="first"
+                avatarVariant={item.type === 'action' ? item.avatarVariant : 'default'}
+              />
+            ))}
+          </ul>
+        </div>
+        
+        <div className="cp-footer">
+          <span>Start a chat</span>
+          <div className="cp-shortcuts">
+            <kbd className="cp-shortcut-hint">↑↓</kbd>
+            <kbd className="cp-shortcut-hint">CMD + P</kbd>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <AnimatePresence>
@@ -144,34 +196,22 @@ export default function CommandPalette({ isOpen, onClose, setView }: CommandPale
                 <div className="cp-section-header">RECENT & ACTIONS</div>
                 <ul className="cp-list">
                   {items.map((item, index) => (
-                    <motion.li
+                    <CommandPaletteRow
                       key={index}
-                      className={`cp-item ${index === selectedIndex ? 'active' : ''} ${item.type === 'action' ? 'cp-action-item' : ''}`}
+                      symbol={item.type === 'stock' ? item.symbol : item.label}
+                      company={item.type === 'stock' ? item.company : ''}
+                      isActive={index === selectedIndex}
                       onMouseEnter={() => setSelectedIndex(index)}
                       onClick={() => handleSelect(index)}
-                      whileTap={{ scale: 0.98 }}
-                      transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-                    >
-                      <div className="cp-sheen"></div>
-                      <div className="cp-item-left">
-                        <div className="cp-logo-placeholder">{item.symbol[0]}</div>
-                        <div className="cp-item-info">
-                          <span className="cp-symbol">{item.symbol}</span>
-                          <span className="cp-company">{item.company}</span>
-                        </div>
-                      </div>
-                      <div className="cp-item-right">
-                        {item.type === 'stock' ? (
-                          <div className="cp-price-info text-red">
-                            <span className="cp-change">▼ {item.change}</span>
-                            <span className="cp-price">{item.price}</span>
-                          </div>
-                        ) : (
-                          <kbd className="cp-enter-hint">{item.shortcut || 'GO'}</kbd>
-                        )}
-                        <kbd className="cp-enter-hint">ENTER</kbd>
-                      </div>
-                    </motion.li>
+                      variant={item.type === 'stock' ? 'double' : 'single'}
+                      showPriceInfo={item.type === 'stock'}
+                      price={item.type === 'stock' ? item.price : undefined}
+                      change={item.type === 'stock' ? item.change : undefined}
+                      showKeyboardShortcut={item.type === 'action' && !!item.shortcut}
+                      keyboardShortcut={item.type === 'action' ? item.shortcut : undefined}
+                      initialsType="first"
+                      avatarVariant={item.type === 'action' ? item.avatarVariant : 'default'}
+                    />
                   ))}
                 </ul>
               </div>
