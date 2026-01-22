@@ -7,7 +7,7 @@ A React-based financial dashboard prototype featuring an interactive command pal
 - **React + Vite** - Modern React development with Vite
 - **Command Palette** - Press `CMD+K` (or `CTRL+K`) to open
 - **WebGL Shadows** - Custom shader-based gradient shadows
-- **Interactive Animations** - Smooth hover effects and transitions using Anime.js
+- **Interactive Animations** - Smooth hover effects and transitions using Framer Motion
 - **Conic Gradient Borders** - Dynamic rotating gradient borders on cards and tabs
 
 ## Getting Started
@@ -42,19 +42,54 @@ npm run preview
 
 ```
 ├── src/
-│   ├── components/      # React components
-│   │   ├── Sidebar.jsx
-│   │   ├── Dashboard.jsx
-│   │   ├── CommandPalette.jsx
-│   │   └── ...
-│   ├── hooks/          # Custom React hooks
+│   ├── components/         # React components (organized by feature)
+│   │   ├── charts/        # Data visualization components
+│   │   │   ├── AreaChart.jsx
+│   │   │   ├── BarChart.jsx
+│   │   │   ├── HorizontalBarChart.jsx
+│   │   │   ├── LineChart.jsx
+│   │   │   └── index.js
+│   │   ├── cards/         # Card components
+│   │   │   ├── SummaryCard.jsx
+│   │   │   ├── TopPredictorCard.jsx
+│   │   │   ├── TopPredictorsCard.jsx
+│   │   │   └── index.js
+│   │   ├── layout/         # Layout components
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── DataTable.jsx
+│   │   │   ├── GaugeLayout.jsx
+│   │   │   ├── KpiLayout.jsx
+│   │   │   └── index.js
+│   │   ├── navigation/    # Navigation components
+│   │   │   ├── Header.jsx
+│   │   │   ├── NavTabs.jsx
+│   │   │   ├── Sidebar.jsx
+│   │   │   ├── Tab.jsx
+│   │   │   └── index.js
+│   │   ├── pages/         # Page-level components
+│   │   │   ├── CardExplorer.jsx
+│   │   │   ├── ComponentLibrary.jsx
+│   │   │   └── index.js
+│   │   ├── ui/            # UI primitives
+│   │   │   ├── Chip.jsx
+│   │   │   ├── CommandPalette.jsx
+│   │   │   └── index.js
+│   │   ├── ErrorBoundary.jsx
+│   │   └── index.js       # Barrel export
+│   ├── hooks/             # Custom React hooks
+│   │   ├── useAnimeAnimations.js
+│   │   ├── useCardHover.js
 │   │   ├── useCommandPalette.js
 │   │   ├── useWebGLShadow.js
-│   │   ├── useCardHover.js
-│   │   └── useAnimeAnimations.js
-│   ├── App.jsx         # Main app component
-│   ├── main.jsx        # React entry point
-│   └── styles.css      # Global styles
+│   │   └── index.js       # Barrel export
+│   ├── utils/             # Utility functions
+│   │   ├── cn.js
+│   │   └── index.js       # Barrel export
+│   ├── constants/         # Constants and configuration
+│   │   └── index.js
+│   ├── App.jsx            # Main app component
+│   ├── main.jsx           # React entry point
+│   └── styles.css         # Global styles
 ├── index.html
 ├── package.json
 └── vite.config.js
@@ -71,5 +106,6 @@ npm run preview
 
 - React 18
 - Vite
-- Anime.js
-- WebGL
+- Framer Motion - Animation library
+- Tailwind CSS - Utility-first CSS framework
+- WebGL - Custom shader-based shadows

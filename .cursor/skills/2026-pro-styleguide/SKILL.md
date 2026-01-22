@@ -1,134 +1,138 @@
 ---
-name: 2026-pro-styleguide
-description: Use this resource as a source of truth to for our style guide and rules for building our UI
+name: ui-skills
+description: Opinionated constraints for building better interfaces with agents, customized for specific Project Design System.
 ---
 
-# Design System & UI Rules
+# UI Skills
 
-## 1. Typography
-**Font Families:**
-- Primary (UI): `General Sans` (**Variable Font**)
-- Mono (Numbers/Data): `JetBrains Mono`
+When invoked, apply these opinionated constraints for building better interfaces.
 
-**Font Weights (Variable Axis):**
-- Regular/Book: 450 (Use specific value, do not round to 400)
-- Medium/Semi: 530 (Use specific value, do not round to 500)
-- Bold: 700 (Standard bold for Mono)
+## How to use
 
-**Line Height (Leading):**
-- **Single-line Content:** 100% (1.0)
-- **Multi-line Content:** 150% (1.5)
-*Note: This rule applies globally to ALL text elements (Titles, Paragraphs, Labels).*
+- `/ui-skills`
+  Apply these constraints to any UI work in this conversation.
 
-**Text Sizes (px):**
-- 2xs: 12px
-- xs: 14px
-- s: 16px
-- m: 18px
-- l: 20px
-- xl: 24px
-- 2xl: 28px
+- `/ui-skills <file>`
+  Review the file against all constraints below and output:
+  - violations (quote the exact line/snippet)
+  - why it matters (1 short sentence)
+  - a concrete fix (code-level suggestion)
 
-**Text Styles Map:**
-- `Title 4`: size: 2xl, weight: 530
-- `Title 3`: size: xl, weight: 530
-- `Title 2`: size: l, weight: 450
-- `Title 1`: size: m, weight: 450
-- `Paragraph 3`: size: s, weight: 450
-- `Paragraph 2`: size: xs, weight: 450
-- `Paragraph 1`: size: 2xs, weight: 450
-- `Button Label`: size: s, weight: 450
-- `Table Label`: size: xs/2xs, weight: 450
-- `Mono Label`: Uppercase, Bold
+## Stack
 
-## 2. Spacing, Radius & Borders
-**Grid System:**
-- Base unit: 4px (Implicit grid).
-- Smallest exception unit: 2px.
+- MUST use Tailwind CSS defaults unless custom values already exist or are explicitly requested (See **Spacing** and **Colors** below for required overrides).
+- MUST use `motion/react` (formerly `framer-motion`) when JavaScript animation is required.
+- SHOULD use `tw-animate-css` for entrance and micro-animations in Tailwind CSS.
+- MUST use `cn` utility (`clsx` + `tailwind-merge`) for class logic.
+- NEVER use Chakra UI or other component libraries; strictly use Tailwind utility classes.
 
-**Spacing Token Scale (Gap/Padding/Margin):**
-[2, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40]
+## Components
 
-**Border Width:**
-- Default: 1px (Strictly applied to all bordered elements).
+- **General Accessibility:**
+  - MUST use accessible component primitives for anything with keyboard or focus behavior (`Base UI`, `React Aria`, `Radix`).
+  - MUST add an `aria-label` to icon-only buttons.
+  - NEVER rebuild keyboard or focus behavior by hand unless explicitly requested.
 
-**Border Radius:**
-- Standard steps: 2px, 4px, 8px, 12px, 16px.
-- Full/Pill: 9999px (labeled as 9000).
+- **Button Primary (High Fidelity):**
+  - Label: `Base Gray` (#0C0D0D) | Weight: 450.
+  - Fill: Linear Gradient (Top -> Bottom): White 80% -> White 70%.
+  - Outer Border: `card-border` (White 10% -> White 5%).
+  - Inner Border (Highlight): MUST use a `::before` pseudo-element (masked) or inset box-shadow to create a top-shine (White 100%) to bottom-shadow (Black 30%) gradient. Width: 0.5px.
 
-## 3. Colors & Tokens
-**Base Palette:**
-- `Base Gray`: #0C0D0D
-- `White Alpha`: 100%, 90%, 80%, 70%, 60%, 50%, 40%, 30%, 20%, 10%, 5%, 2.5%, 0%
-- `Black Alpha`: 100%, 90%, 80%, 70%, 60%, 50%, 40%, 30%, 20%, 10%, 5%, 2.5%, 0%
+- **Button Secondary (Glass/Ghost):**
+  - Label: `txt-secondary` (White 60%) | Weight: 450.
+  - Fill: Linear Gradient (Top -> Bottom): White 0% -> White 10%.
+  - Outer Border: `card-border` (White 10% -> White 5%).
+  - Inner Border (Ring): Solid Black 20% (0.5px width) via inset box-shadow.
 
-**Semantic Surface Tokens:**
-- `surface-0`: Base Gray (#0C0D0D)
-- `surface-1`: White 5%
-- `surface-2`: White 2.5%
+- **Table Small (Key/Value):**
+  - Usage: Direct key/value pairs inside cards.
+  - Layout: `flex justify-between items-center`, `py-2` (8px).
+  - Borders: Strictly `divide-y` logic (between items only), using `card-border`.
+  - Typography: Key (`xs`, 450 weight, `txt-secondary`) vs Value (`s`, 700 weight, `txt-primary`, Mono).
 
-**Semantic Card Tokens:**
-- `card-bg-0` (Base): surface-1 + backdrop-blur(200)
-- `card-bg-1` (Nested): surface-2 + backdrop-blur(200)
-- `card-border`: 1px width, Linear Gradient (45deg, White 10% -> White 5%)
+## Typography
 
-**Semantic Text Tokens:**
-- `txt-primary`: White 90%
-- `txt-secondary`: White 60%
-- `txt-tertiary`: White 40%
+- **Font Families:**
+  - MUST use `General Sans` (Variable) for UI.
+  - MUST use `JetBrains Mono` for numbers, data, and IDs.
 
-## 4. Component Specs
+- **Weights (Variable Axis):**
+  - MUST use specific weights: `450` (Book) and `530` (Medium).
+  - NEVER round to 400 or 500.
+  - Mono Bold: 700.
 
-### Button Primary (High Fidelity)
-- **Label:** `Base Gray` (#0C0D0D) | Weight: 450
-- **Background Fill:** Linear Gradient (Top -> Bottom): White 80% -> White 70%
-- **Outer Border:** `card-border` (White 10% -> White 5%)
-- **Inner Border (Highlight/Shadow):**
-  - *Must use absolute positioned pseudo-element or inset box-shadow.*
-  - Width: 0.5px
-  - Gradient (Top -> Bottom): [0%] White 100% -> [25%] Transparent -> [75%] Transparent -> [100%] Black 30%
+- **Line Height Logic:**
+  - Single-line content (Titles/Labels): MUST use `100%` (`leading-none`).
+  - Multi-line content (Paragraphs): MUST use `150%` (`leading-relaxed`).
 
-### Button Secondary (Glass/Ghost)
-- **Label:** `txt-secondary` (White 60%) | Weight: 450
-- **Background Fill:** Linear Gradient (Top -> Bottom): White 0% -> White 10%
-- **Outer Border:** `card-border` (White 10% -> White 5%)
-- **Inner Border (Ring):**
-  - Width: 0.5px
-  - Color: Black 20% (Solid inset shadow)
+- **Formatting:**
+  - MUST use `text-balance` for headings and `text-pretty` for body.
+  - MUST use `tabular-nums` for data.
+  - SHOULD use `truncate` or `line-clamp` for dense UI.
 
-### Table Small (Key/Value Data)
-- **Usage:** Inside cards for direct key/value pairs.
-- **Layout:**
-  - Row Padding: `8px` (py-2)
-  - Alignment: Flex Row, Justify Between, Items Center.
-- **Dividers:**
-  - Style: `card-border` (1px gradient).
-  - Placement: Between rows only (No border above first item, no border below last item).
-- **Typography - Key (Left):**
-  - Font: `General Sans`
-  - Size: `xs` (14px) *[Inferred from hierarchy]*
-  - Color: `txt-secondary`
-  - Weight: 450
-  - Line-Height: 100% (Single Line)
-- **Typography - Value (Right):**
-  - Font: `JetBrains Mono`
-  - Size: `s` (16px) (Matches `Number Label 3`)
-  - Color: `txt-primary`
-  - Weight: 700 (Bold)
-  - Line-Height: 100% (Single Line)
+## Layout & Spacing
 
-## 5. Implementation Rules
-1. **Semantic Naming:** Always use semantic names (e.g., `txt-secondary`) instead of raw hex values.
-2. **Typography Logic:**
-   - **Variable Font Usage:** Use `font-weight: 450` and `font-weight: 530` explicitly.
-   - **Line Height Rule:** Ignore element type.
-     - Single-line: `leading-none` (100%).
-     - Multi-line: `leading-relaxed` (150%).
-3. **Card Hierarchy:**
-   - Use `card-bg-0` for Parent/Base layers.
-   - Use `card-bg-1` for Nested layers.
-4. **Button Construction:**
-   - **Primary:** Use `::before` pseudo-element for the gradient inner border (Top Shine/Bottom Shadow).
-   - **Secondary:** Use `box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.2)` for the inner border.
-5. **Table Logic:**
-   - For "Table Small", ensure borders are strictly *between* items (`divide-y` logic), never on the outer edges of the list container.
+- **Grid System:**
+  - Base unit: 4px (Implicit).
+  - Exception unit: 2px.
+
+- **Spacing Token Scale:**
+  - MUST strictly adhere to: `[2, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40]`.
+  - NEVER invent arbitrary values (e.g., 10px, 15px).
+
+- **Borders:**
+  - Width: MUST be `1px` for all bordered elements (Cards, Buttons, Tables).
+  - Radius: Standard steps `[2px, 4px, 8px, 12px, 16px]` or `9999px` (Pill).
+
+- **General:**
+  - NEVER use `h-screen`, use `h-dvh`.
+  - MUST respect `safe-area-inset` for fixed elements.
+
+## Design & Colors
+
+- **Base Palette:**
+  - `Base Gray`: `#0C0D0D`
+  - Alpha Scales: 0% to 100% (White/Black).
+
+- **Semantic Tokens (MUST USE):**
+  - `surface-0`: Base Gray.
+  - `surface-1`: White 5%.
+  - `surface-2`: White 2.5%.
+  - `card-bg-0`: surface-1 + blur(200).
+  - `card-bg-1`: surface-2 + blur(200).
+  - `card-border`: Linear Gradient (45deg, White 10% -> White 5%).
+  - `txt-primary` (White 90%), `txt-secondary` (White 60%), `txt-tertiary` (White 40%).
+
+- **Card Hierarchy:**
+  - MUST use `card-bg-0` for Parent/Base layers.
+  - MUST use `card-bg-1` for Nested layers.
+
+- **Accent Colors:**
+  - Source: **Tailwind CSS Default Palette**.
+  - MUST match screenshot colors to the nearest Tailwind color token (e.g., `teal-400`, `orange-500`, `sky-600`).
+  - NEVER use arbitrary hex codes for accents.
+
+- **Gradients:**
+  - MUST use specified gradients for Buttons and Card Borders.
+  - NEVER use purple or multicolor gradients (unless matching a specific Tailwind accent in a chart).
+
+## Interaction
+
+- MUST use an `AlertDialog` for destructive or irreversible actions.
+- SHOULD use structural skeletons for loading states.
+- MUST show errors next to where the action happens.
+- NEVER block paste in `input` or `textarea` elements.
+
+## Animation
+
+- NEVER add animation unless it is explicitly requested.
+- MUST animate only compositor props (`transform`, `opacity`).
+- NEVER animate layout properties (`width`, `height`, `top`, `left`, `margin`, `padding`).
+- NEVER exceed `200ms` for interaction feedback.
+
+## Performance
+
+- NEVER animate large `blur()` or `backdrop-filter` surfaces (static blurs on cards are okay).
+- NEVER apply `will-change` outside an active animation.
+- NEVER use `useEffect` for anything that can be expressed as render logic.
