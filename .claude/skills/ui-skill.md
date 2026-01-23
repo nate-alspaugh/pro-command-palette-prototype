@@ -1,8 +1,6 @@
----
-name: ui-guide
-description: Our design constraints for Pro 
----
+# UI Skill
 
+Design constraints for Pro prototype.
 
 ## Stack
 
