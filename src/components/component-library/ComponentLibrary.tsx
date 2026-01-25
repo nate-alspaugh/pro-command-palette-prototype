@@ -20,6 +20,7 @@ import {
   GaugeLayout,
   KpiLayout,
   DataTable,
+  Modal,
   RightPanel,
   Header,
   NavTabs,
@@ -825,6 +826,45 @@ const componentsList: ComponentDefinition[] = [
     properties: [],
     render: () => <NavTabs />,
     wide: true // Mark as wide component for scaling
+  },
+  {
+    id: 'modal',
+    name: 'Modal',
+    category: 'Layouts',
+    properties: [
+      { id: 'size', name: 'Size', type: 'select', options: ['page', 'lg', 'md', 'sm'], default: 'md' },
+      { id: 'showClose', name: 'Show Close Button', type: 'boolean', default: true }
+    ],
+    render: (props) => (
+      <Modal
+        isOpen={true}
+        onClose={() => {}}
+        size={props.size}
+        showClose={props.showClose}
+        isPreview={true}
+      >
+        <div style={{ padding: '60px 40px', minHeight: '300px' }}>
+          <Header title="Company Profile" subtitle="RBLX" showLogo={true} />
+          <div style={{ marginTop: '24px', color: 'var(--txt-secondary)', fontSize: '14px' }}>
+            This modal can contain any page-level content including headers, navigation tabs, cards, charts, and scrollable content areas. It's designed for the "page-as-modal" pattern (like Notion).
+          </div>
+          <div style={{
+            marginTop: '24px',
+            padding: '40px',
+            background: 'var(--surface-1)',
+            borderRadius: '12px',
+            border: '1px dashed var(--txt-tertiary)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'var(--txt-tertiary)',
+            fontSize: '14px'
+          }}>
+            Content Area (Dashboard, forms, data tables, etc.)
+          </div>
+        </div>
+      </Modal>
+    )
   },
   {
     id: 'layout-full',

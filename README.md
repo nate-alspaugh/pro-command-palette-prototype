@@ -100,6 +100,9 @@ Components follow a **flat, one-folder-per-component** structure (similar to Bas
 │   │   ├── main-nav/
 │   │   │   ├── MainNav.tsx
 │   │   │   └── index.ts
+│   │   ├── modal/
+│   │   │   ├── Modal.tsx
+│   │   │   └── index.ts
 │   │   ├── nav-tabs/
 │   │   │   ├── NavTabs.tsx
 │   │   │   └── index.ts

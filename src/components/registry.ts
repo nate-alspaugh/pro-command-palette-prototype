@@ -310,6 +310,24 @@ export const componentRegistry: ComponentMeta[] = [
     guidelines: 'Use for 2-3 large KPI values with supporting data'
   },
   {
+    id: 'modal',
+    name: 'Modal',
+    category: 'layout',
+    path: '@/components/modal',
+    purpose: {
+      what: 'Full-screen or large overlay container for page-level content (Notion-style page-as-modal)',
+      where: 'Viewing detailed content in overlay, company profiles, detail views without navigation',
+      notFor: 'Simple confirmations (use Dialog), tooltips, dropdown menus, toasts'
+    },
+    variants: {
+      size: { options: ['page', 'lg', 'md', 'sm'], default: 'page' },
+      showClose: { options: ['true', 'false'], default: 'true' }
+    },
+    composition: { uses: ['Base UI Dialog'], usedBy: [] },
+    related: ['CommandPalette', 'RightPanel'],
+    guidelines: 'Use page size for full content layouts, sm for mobile/compact dialogs. Built on Base UI Dialog for accessibility (focus trap, escape to close, aria).'
+  },
+  {
     id: 'right-panel',
     name: 'RightPanel',
     category: 'layout',
@@ -323,7 +341,7 @@ export const componentRegistry: ComponentMeta[] = [
       isOpen: { options: ['true', 'false'], default: 'false' }
     },
     composition: { uses: [], usedBy: [] },
-    related: ['Dashboard', 'Sidebar'],
+    related: ['Dashboard', 'Sidebar', 'Modal'],
     guidelines: 'Use for contextual content that augments main view'
   },
 

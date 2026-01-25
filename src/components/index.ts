@@ -22,6 +22,7 @@ export { default as Dashboard } from './dashboard'
 export { default as DataTable } from './data-table'
 export { default as GaugeLayout } from './gauge-layout'
 export { default as KpiLayout } from './kpi-layout'
+export { default as Modal } from './modal'
 export { default as RightPanel } from './right-panel'
 
 // Navigation

@@ -2391,3 +2391,89 @@
   }
 
   /* Pro logo button reset */
+
+  /* --- MODAL --- */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+  }
+
+  .modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1001;
+    background: rgba(12, 13, 13, 0.85);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    backdrop-filter: blur(40px) saturate(180%);
+    border-radius: 16px;
+    border: 1px solid var(--surface-1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.05),
+      0 24px 48px -12px rgba(0, 0, 0, 0.5),
+      0 48px 96px -24px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Gradient border overlay for modal */
+  .modal-content::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: 16px;
+    background: var(--card-border);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+    width: 36px;
+    height: 36px;
+    border-radius: 9000px;
+    border: 1px solid var(--surface-1);
+    background: var(--surface-2);
+    color: var(--txt-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .modal-close:hover {
+    background: var(--surface-1);
+    color: var(--txt-primary);
+    border-color: var(--txt-tertiary);
+  }
+
+  .modal-body {
+    flex: 1;
+    overflow-y: auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Preview mode for component library */
+  .modal-preview {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    margin: 0 auto;
+  }
