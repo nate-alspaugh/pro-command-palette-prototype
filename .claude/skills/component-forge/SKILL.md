@@ -82,9 +82,43 @@ Extract and confirm in ONE compact block:
 4. Check similar first
 ```
 
-### Phase 2: Discovery (skip if no similar components)
+### Phase 2: Discovery
 
-Only show if Phase 1 found similar components:
+Check existing options before building from scratch.
+
+**Step 1: Base UI Check**
+
+Base UI (`@base-ui/react`) provides unstyled, accessible primitives. Always check here first.
+
+| Category | Components |
+|----------|------------|
+| Inputs | `Field`, `Input`, `Checkbox`, `Radio`, `Select`, `Slider`, `Switch`, `NumberField` |
+| Overlays | `Dialog`, `Popover`, `Tooltip`, `Menu`, `AlertDialog` |
+| Navigation | `Tabs`, `Accordion`, `NavigationMenu` |
+| Feedback | `Progress`, `Toast` |
+| Utilities | `FocusTrap`, `Portal`, `VisuallyHidden` |
+
+```
+**Base UI check**: [ComponentName]
+
+1. Use Base UI [Primitive] + our styles
+2. No match - create custom
+```
+
+**Example - TextField using Base UI:**
+```tsx
+import { Field, Input } from '@base-ui/react'
+
+<Field.Root>
+  <Field.Label className="text-field-label">Email</Field.Label>
+  <Input className="text-field" placeholder="Enter email..." />
+  <Field.Error className="text-field-helper-error" />
+</Field.Root>
+```
+
+**Docs**: https://base-ui.com/react/components/[component-name]
+
+**Step 2: Similar Components** (skip if none found in Phase 1)
 
 ```
 **[SimilarComponent] exists:**
@@ -96,6 +130,22 @@ Only show if Phase 1 found similar components:
 2. Extend existing (add variant)
 3. Cancel
 ```
+
+**Step 3: Composition Check**
+
+Identify existing components to compose the new one from.
+
+```
+**Building [Component] with:**
+
+| Component | Role |
+|-----------|------|
+| [existing] | [how it's used] |
+
+**Or**: Atomic component (no composition needed)
+```
+
+This informs the `uses`/`usedBy` metadata in registration.
 
 ### Phase 3: Architecture (only if variants need discussion)
 
@@ -224,7 +274,7 @@ Register silently, then:
 | Tokens | `src/styles.css` |
 | Library | `src/components/component-library/ComponentLibrary.tsx` |
 | README | `README.md` |
-| Styleguide | `.cursor/skills/2026-pro-styleguide/SKILL.md` |
+| Styleguide | `.claude/skills/ui-skill.md` |
 
 ## Component Folder Structure
 
@@ -243,14 +293,14 @@ src/components/[kebab-name]/
 - [ ] `src/components/registry.ts` - Metadata entry
 - [ ] `ComponentLibrary.tsx` → componentsList - Preview entry
 - [ ] `README.md` - Add to project structure listing
-- [ ] `.cursor/skills/2026-pro-styleguide/SKILL.md` - If has design specs
+- [ ] `.claude/skills/ui-skill.md` - If has design specs
 - [ ] Update `usedBy` arrays if composing other components
 
 **Tokens (ALL required, no skipping):**
 - [ ] `src/styles.css` - Token definition with comment
 - [ ] `ComponentLibrary.tsx` → DesignTokens - Visual display
 - [ ] `README.md` - Update tokens section if new category
-- [ ] `.cursor/skills/2026-pro-styleguide/SKILL.md` - Update token docs
+- [ ] `.claude/skills/ui-skill.md` - Update token docs
 
 ## Design System Rules
 
@@ -258,38 +308,3 @@ src/components/[kebab-name]/
 - **Glass elements**: Use `--border-glass` (gradient)
 - **Spacing**: Only [2, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40]
 - **Radius**: Only [2, 4, 8, 12, 16, 9999]
-
-## Base UI First
-
-**ALWAYS check Base UI before creating a component from scratch.**
-
-Base UI (`@base-ui/react`) provides unstyled, accessible primitives. Our job is to apply glass styles on top.
-
-**Available Base UI components:**
-- Inputs: `Field`, `Input`, `Checkbox`, `Radio`, `Select`, `Slider`, `Switch`, `NumberField`
-- Overlays: `Dialog`, `Popover`, `Tooltip`, `Menu`, `AlertDialog`
-- Navigation: `Tabs`, `Accordion`, `NavigationMenu`
-- Feedback: `Progress`, `Toast`
-- Utilities: `FocusTrap`, `Portal`, `VisuallyHidden`
-
-**Workflow:**
-```
-**Base UI check**: [ComponentName]
-
-1. Use Base UI [Primitive] + our styles
-2. No match - create custom
-```
-
-**Example - TextField:**
-```tsx
-import { Field, Input } from '@base-ui/react'
-
-// Wrap Base UI with our glass styles
-<Field.Root>
-  <Field.Label className="text-field-label">Email</Field.Label>
-  <Input className="text-field" placeholder="Enter email..." />
-  <Field.Error className="text-field-helper-error" />
-</Field.Root>
-```
-
-**Docs**: https://base-ui.com/react/components/[component-name]

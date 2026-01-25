@@ -31,17 +31,41 @@ Does this capture your intent? Anything to adjust?
 
 ## Phase 2: Discovery
 
-**Claude checks registry:**
+**Step 1: Base UI Check**
 
-Searching for components with similar purpose...
+```
+**Base UI check**: Avatar
 
-No existing component handles user identity display.
-Chip exists but is for tags/filters, not identity.
+1. Use Base UI [Primitive] + our styles
+2. No match - create custom  ←
+```
 
-**Atomic components available:**
-- None needed - Avatar is itself atomic
+No Avatar primitive in Base UI. Proceeding with custom component.
 
-Proceeding with new component.
+**Step 2: Similar Components**
+
+```
+**Chip exists:**
+- Purpose: Display tags, filters, removable items
+- Variants: size, variant, removable
+
+**Decision:**
+1. Create new (different enough)  ←
+2. Extend existing (add variant)
+3. Cancel
+```
+
+Chip is for tags/filters, not identity display. Creating new component.
+
+**Step 3: Composition Check**
+
+```
+**Building Avatar with:**
+
+**Or**: Atomic component (no composition needed)  ←
+```
+
+Avatar is itself atomic - no existing components to compose from.
 
 ## Phase 3: Architecture
 
