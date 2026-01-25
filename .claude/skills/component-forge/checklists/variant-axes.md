@@ -56,6 +56,22 @@ Common variant patterns to evaluate for each new component.
 | `footer` | Bottom section content | Cards, modals |
 | `action` | Interactive element slot | Cards, list items |
 
+## Responsive Stacking
+
+**Question**: Does this component have horizontal children that should stack on smaller viewports?
+
+| Pattern | Implementation | When to Use |
+|---------|---------------|-------------|
+| Mobile-first stack | `flex-col sm:flex-row` | Default approach |
+| Wrap overflow | `flex-wrap` | Allow natural wrapping |
+| Responsive grid | `grid-cols-1 md:grid-cols-2` | Card layouts |
+| Prevent text overflow | `min-w-0` on flex children | Long text in flex items |
+
+**Red Flags**:
+- `flex-row` without breakpoint stacking or `flex-wrap`
+- Fixed grid columns without responsive variant
+- Horizontal children that can grow beyond parent width
+
 ## Questions to Ask
 
 For each axis, ask:

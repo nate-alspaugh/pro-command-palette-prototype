@@ -56,6 +56,19 @@ Options:
 Which approach?
 ```
 
+### Horizontal Layout Without Stacking
+```
+This component has horizontal children but no stacking behavior.
+On narrow viewports, children may overflow or break the layout.
+
+Options:
+1. Add mobile-first stacking (`flex-col sm:flex-row`)
+2. Add flex-wrap (`flex-wrap`)
+3. Keep horizontal (parent viewport is fixed-width)
+
+Which approach?
+```
+
 ## Component Similarity Checkpoints
 
 ### Similar Purpose Detected

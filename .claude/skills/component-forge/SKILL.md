@@ -147,6 +147,23 @@ Identify existing components to compose the new one from.
 
 This informs the `uses`/`usedBy` metadata in registration.
 
+**Step 4: Responsive Stacking** (skip if no horizontal layout)
+
+For components with horizontal children (flex-row, grid columns):
+
+```
+**Layout check**: [Component] uses horizontal layout.
+
+| Children | Stacking Behavior |
+|----------|-------------------|
+| [describe children] | [none / stacks at sm / stacks at md] |
+
+**If no stacking**:
+1. Add stacking (`flex-col sm:flex-row`)
+2. Use flex-wrap (`flex-wrap`)
+3. Keep horizontal (viewport is controlled)
+```
+
 ### Phase 3: Architecture (only if variants need discussion)
 
 Skip if variants were confirmed in Phase 1. Only show for complex decisions:
